@@ -1,0 +1,14 @@
+<div *ngIf="tasksList.length; else noTasks">
+    <div appDate [date]="t.created" *ngFor="let t of tasksList | sortName">
+        <ul>
+            <li>
+                {{t.name | transformTask: '!'}}
+                <button (click)="done(t)">Done</button>
+                <button (click)="remove(t)">Remove</button>
+            </li>
+        </ul>
+    </div>
+</div>
+<ng-template #noTasks>
+    <p>No Tasks</p>
+</ng-template>

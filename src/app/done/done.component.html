@@ -1,0 +1,12 @@
+<div *ngIf="tasksDone.length; else noTasks">
+    <div *ngFor="let t of tasksDone">
+        <ul>
+            <li appChecked appDate [date]="t.end">
+                {{t.name | transformTask: ' - super'}}
+            </li>
+        </ul>
+    </div>
+</div>
+<ng-template #noTasks>
+    <p>No Tasks</p>
+</ng-template>
