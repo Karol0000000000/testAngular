@@ -1,0 +1,21 @@
+li{
+    background: lightblue;
+    margin: 5px;
+    padding: 5px;
+}
+
+.last-li{
+    background: green;
+    margin: 5px;
+    padding: 5px;
+}
+
+.odd-li{
+    background: lavender;
+    margin: 5px;
+    padding: 5px;
+}
+
+button{
+    margin: 5px;
+}

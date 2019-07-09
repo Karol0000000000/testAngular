@@ -21,4 +21,8 @@ export class DoneComponent implements OnInit {
   ngOnInit() {
   }
 
+  remove(t){
+    this.tasksService.remove(t);
+  }
+
 }

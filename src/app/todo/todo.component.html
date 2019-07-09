@@ -1,14 +1,13 @@
 <div *ngIf="tasksList.length; else noTasks">
-    <div appDate [date]="t.created" *ngFor="let t of tasksList | sortName">
-        <ul>
-            <li>
-                {{t.name | transformTask: '!'}}
-                <button (click)="done(t)">Done</button>
-                <button (click)="remove(t)">Remove</button>
-            </li>
-        </ul>
-    </div>
+    <p class="badge badge-info" [ngStyle]="{color: getColor()}">Task count: {{tasksList.length}}</p>
+    <ul>
+        <li appDate [date]="t.created" *ngFor="let t of tasksList | sortName; let odd = odd" [ngClass]="{'odd-li': odd, 'last-li': tasksList.length === 1}">
+            {{t.name | transformTask: '!'}}
+            <button type="button" class="btn btn-success" (click)="done(t)">Done</button>
+            <button type="button" class="btn btn-danger" (click)="remove(t)">Remove</button>
+        </li>
+    </ul>
 </div>
 <ng-template #noTasks>
-    <p>No Tasks</p>
+    <p class="badge badge-info">No Tasks</p>
 </ng-template>

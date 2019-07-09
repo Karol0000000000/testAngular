@@ -1,30 +1,28 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Task } from '../models/task';
+import { HttpService } from './http.service';
 
 @Injectable()
 export class TasksService {
 
     private taskListObs = new BehaviorSubject<Array<Task>>([]);
 
-    constructor() {
-        const taskList = [
-            { name: 'task1', created: new Date().toLocaleString(), isDone: false },
-            { name: 'task2', created: new Date().toLocaleString(), isDone: false },
-            { name: 'task3', created: new Date().toLocaleString(), isDone: false },
-            { name: 'task4', created: new Date().toLocaleString(), end: new Date().toLocaleString(), isDone: true }
-        ];
-        this.taskListObs.next(taskList);
+    constructor(private httpService: HttpService) {
+        this.httpService.getTasks().subscribe(tasks => this.taskListObs.next(tasks));
     }
 
     add(t: Task) {
         const list = this.taskListObs.getValue();
         list.push(t);
         this.taskListObs.next(list);
+        this.saveTaskInDb(t);
+
     }
 
     remove(t: Task) {
         const list = this.taskListObs.getValue().filter(x => x !== t);
+        this.httpService.deleteTask(t);
         this.taskListObs.next(list);
     }
 
@@ -37,5 +35,20 @@ export class TasksService {
 
     getTaskList(): Observable<Array<Task>> {
         return this.taskListObs.asObservable();
+    }
+
+    saveTaskInDb(t: Task){
+        this.httpService.saveTask(t).subscribe(t1 => {
+            this.httpService.getTaskByName(t.name).subscribe((t2: Task) => {
+                let oldValues = this.taskListObs.getValue();
+                let newTab = oldValues.filter(z => z.name !== t2.name);
+                newTab.push(t2);
+                this.taskListObs.next(newTab);
+            });
+        });
+    }
+
+    updateTaskInDb(t: Task){
+        this.httpService.updateTask(t);
     }
 }

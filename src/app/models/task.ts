@@ -3,5 +3,6 @@ export interface Task {
     name: string,
     created: string,
     end?: string,
-    isDone: boolean
+    isDone: boolean,
+    isDownloaded: boolean
 }
