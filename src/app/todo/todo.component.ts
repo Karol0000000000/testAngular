@@ -24,8 +24,6 @@ export class TodoComponent implements OnInit {
   }
 
   done(t: Task) {
-    t.isDone = true;
-    this.tasksService.updateTaskInDb(t);
     this.tasksService.done(t);
   }
 

@@ -1,14 +1,12 @@
-<div *ngIf="tasksDone.length; else noTasks">
+<ng-container *ngIf="tasksDone.length; else noTasks">
     <p class="badge badge-info">Done tasks count: {{tasksDone.length}}</p>
-    <div *ngFor="let t of tasksDone">
-        <ul>
-            <li appChecked appDate [date]="t.end">
-                {{t.name | transformTask: ' - super'}}
-                <button type="button" class="btn btn-danger" (click)="remove(t)">Remove</button>
-            </li>
-        </ul>
-    </div>
-</div>
+    <ul>
+        <li *ngFor="let t of tasksDone" appChecked appDate [date]="t.end">
+            {{t.name | transformTask: ' - super'}}
+            <button type="button" class="btn btn-danger" (click)="remove(t)">Remove</button>
+        </li>
+    </ul>
+</ng-container>
 <ng-template #noTasks>
     <p class="badge badge-info">No Tasks</p>
 </ng-template>

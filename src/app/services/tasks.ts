@@ -12,7 +12,7 @@ export class TasksService {
         this.httpService.getTasks().subscribe(tasks => this.taskListObs.next(tasks));
     }
 
-    add(t: Task) {
+    add(t: Task): void {
         const list = this.taskListObs.getValue();
         list.push(t);
         this.taskListObs.next(list);
@@ -20,35 +20,37 @@ export class TasksService {
 
     }
 
-    remove(t: Task) {
+    remove(t: Task): void {
         const list = this.taskListObs.getValue().filter(x => x !== t);
         this.httpService.deleteTask(t);
         this.taskListObs.next(list);
     }
 
-    done(t: Task) {
+    done(t: Task): void {
         t.end = new Date().toLocaleString();
         t.isDone = true;
-        const list = this.taskListObs.getValue();
-        this.taskListObs.next(list);
+        this.updateTaskInDb(t);
+        this.taskListObs.next(this.taskListObs.getValue());
     }
 
     getTaskList(): Observable<Array<Task>> {
         return this.taskListObs.asObservable();
     }
 
-    saveTaskInDb(t: Task){
+    saveTaskInDb(t: Task): void {
         this.httpService.saveTask(t).subscribe(t1 => {
+            console.log(t1);
             this.httpService.getTaskByName(t.name).subscribe((t2: Task) => {
-                let oldValues = this.taskListObs.getValue();
+                const oldValues = this.taskListObs.getValue();
                 let newTab = oldValues.filter(z => z.name !== t2.name);
                 newTab.push(t2);
                 this.taskListObs.next(newTab);
+                console.log(t2);
             });
         });
     }
 
-    updateTaskInDb(t: Task){
+    updateTaskInDb(t: Task): void {
         this.httpService.updateTask(t);
     }
 }
